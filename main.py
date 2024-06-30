@@ -15,6 +15,11 @@ class TrainSimulator:
         self.current_station_index = 0
         self.stations = []
 
+        # Ensure 'Routen' directory exists
+        self.routes_dir = 'Routen'
+        if not os.path.exists(self.routes_dir):
+            os.makedirs(self.routes_dir)
+
         # Labels for Dropdowns
         self.strecke_label = tk.Label(root, text="Wähle eine Strecke:")
         self.strecke_label.grid(row=0, column=0, padx=10, pady=10)
@@ -54,13 +59,13 @@ class TrainSimulator:
         self.load_strecken()
 
     def load_strecken(self):
-        strecken = [d for d in os.listdir() if os.path.isdir(d)]
+        strecken = [d for d in os.listdir(self.routes_dir) if os.path.isdir(os.path.join(self.routes_dir, d))]
         self.strecke_dropdown['values'] = strecken
 
     def load_zugdienste(self, event=None):
         strecke = self.strecke_var.get()
         if strecke:
-            zugdienste = [f for f in os.listdir(strecke) if f.endswith('.txt')]
+            zugdienste = [f for f in os.listdir(os.path.join(self.routes_dir, strecke)) if f.endswith('.txt')]
             self.zugdienst_dropdown['values'] = zugdienste
 
     def load_stations(self, event=None):
@@ -68,7 +73,7 @@ class TrainSimulator:
         strecke = self.strecke_var.get()
         zugdienst = self.zugdienst_var.get()
         if strecke and zugdienst:
-            self.current_path = os.path.join(strecke, zugdienst)
+            self.current_path = os.path.join(self.routes_dir, strecke, zugdienst)
             with open(self.current_path, 'r', encoding='utf-8') as file:
                 self.stations = [line.strip() for line in file.readlines()]
             self.update_station_labels()
@@ -104,14 +109,13 @@ class TrainSimulator:
             pygame.mixer.music.play()
 
     def open_folder(self):
-        if hasattr(self, 'current_path') and self.current_path:
-            folder_path = os.path.dirname(self.current_path)
-            if platform.system() == "Windows":
-                os.startfile(folder_path)
-            elif platform.system() == "Darwin":
-                subprocess.Popen(["open", folder_path])
-            else:
-                subprocess.Popen(["xdg-open", folder_path])
+        folder_path = self.routes_dir
+        if platform.system() == "Windows":
+            os.startfile(folder_path)
+        elif platform.system() == "Darwin":
+            subprocess.Popen(["open", folder_path])
+        else:
+            subprocess.Popen(["xdg-open", folder_path])
 
 
 if __name__ == "__main__":

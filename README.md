@@ -47,14 +47,14 @@ pip install gtts pygame
 Stelle sicher, dass deine Ordner- und Dateistruktur wie folgt aussieht:
 
 ```
-.
-├── rail_announcer.py
-├── Strecke1
+Routen/
+├── Strecke1/
 │   ├── Zugdienst1.txt
 │   ├── Zugdienst2.txt
-├── Strecke2
+├── Strecke2/
 │   ├── Zugdienst1.txt
 │   ├── Zugdienst2.txt
+
 ```
 
 Jede `.txt`-Datei sollte eine Liste von Bahnhofsname enthalten, wobei jeder Name in einer neuen Zeile steht.
