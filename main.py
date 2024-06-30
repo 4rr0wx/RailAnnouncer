@@ -3,41 +3,53 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from gtts import gTTS
 import pygame
+import subprocess
+import platform
 
 
 class TrainSimulator:
     def __init__(self, root):
         self.root = root
-        self.root.title("Train Simulator Announcements")
+        self.root.title("RailAnnouncer")
 
         self.current_station_index = 0
         self.stations = []
+
+        # Labels for Dropdowns
+        self.strecke_label = tk.Label(root, text="Wähle eine Strecke:")
+        self.strecke_label.grid(row=0, column=0, padx=10, pady=10)
+
+        self.zugdienst_label = tk.Label(root, text="Wähle einen Zugdienst:")
+        self.zugdienst_label.grid(row=0, column=1, padx=10, pady=10)
 
         # Strecke Dropdown
         self.strecke_var = tk.StringVar()
         self.strecke_dropdown = ttk.Combobox(root, textvariable=self.strecke_var)
         self.strecke_dropdown.bind("<<ComboboxSelected>>", self.load_zugdienste)
-        self.strecke_dropdown.grid(row=0, column=0, padx=10, pady=10)
+        self.strecke_dropdown.grid(row=1, column=0, padx=10, pady=10)
 
         # Zugdienst Dropdown
         self.zugdienst_var = tk.StringVar()
         self.zugdienst_dropdown = ttk.Combobox(root, textvariable=self.zugdienst_var)
         self.zugdienst_dropdown.bind("<<ComboboxSelected>>", self.load_stations)
-        self.zugdienst_dropdown.grid(row=0, column=1, padx=10, pady=10)
+        self.zugdienst_dropdown.grid(row=1, column=1, padx=10, pady=10)
 
         # Buttons
         self.next_button = tk.Button(root, text="Nächste Station", command=self.next_station)
-        self.next_button.grid(row=1, column=0, padx=10, pady=10)
+        self.next_button.grid(row=2, column=0, padx=10, pady=10)
 
         self.prev_button = tk.Button(root, text="Vorherige Station", command=self.prev_station)
-        self.prev_button.grid(row=1, column=1, padx=10, pady=10)
+        self.prev_button.grid(row=2, column=1, padx=10, pady=10)
+
+        self.open_folder_button = tk.Button(root, text="Ordner öffnen", command=self.open_folder)
+        self.open_folder_button.grid(row=2, column=2, padx=10, pady=10)
 
         # Labels
         self.current_station_label = tk.Label(root, text="Aktuelle Station: ")
-        self.current_station_label.grid(row=2, column=0, padx=10, pady=10)
+        self.current_station_label.grid(row=3, column=0, padx=10, pady=10)
 
         self.next_station_label = tk.Label(root, text="Nächste Station: ")
-        self.next_station_label.grid(row=2, column=1, padx=10, pady=10)
+        self.next_station_label.grid(row=3, column=1, padx=10, pady=10)
 
         self.load_strecken()
 
@@ -56,7 +68,8 @@ class TrainSimulator:
         strecke = self.strecke_var.get()
         zugdienst = self.zugdienst_var.get()
         if strecke and zugdienst:
-            with open(os.path.join(strecke, zugdienst), 'r', encoding='utf-8') as file:
+            self.current_path = os.path.join(strecke, zugdienst)
+            with open(self.current_path, 'r', encoding='utf-8') as file:
                 self.stations = [line.strip() for line in file.readlines()]
             self.update_station_labels()
 
@@ -89,6 +102,16 @@ class TrainSimulator:
             pygame.mixer.init()
             pygame.mixer.music.load("announcement.mp3")
             pygame.mixer.music.play()
+
+    def open_folder(self):
+        if hasattr(self, 'current_path') and self.current_path:
+            folder_path = os.path.dirname(self.current_path)
+            if platform.system() == "Windows":
+                os.startfile(folder_path)
+            elif platform.system() == "Darwin":
+                subprocess.Popen(["open", folder_path])
+            else:
+                subprocess.Popen(["xdg-open", folder_path])
 
 
 if __name__ == "__main__":
