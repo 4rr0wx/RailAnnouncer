@@ -1,9 +1,6 @@
-Hier ist eine Beispiel-README-Datei für dein `RailAnnouncer` Programm:
-
-
-# RailAnnouncer
-
-RailAnnouncer ist ein Python-Programm mit einer grafischen Benutzeroberfläche (GUI), das Text-to-Speech-Ansagen für einen Zugsimulator abspielt. Das Programm verwendet `gtts` für die Text-to-Speech-Funktionalität und `tkinter` für die GUI.
+# Rail Announcer
+![Rail Announcer Logo](RailAnnouncer_logo.png)
+Rail Announcer ist ein Python-Programm mit einer grafischen Benutzeroberfläche (GUI), das Text-to-Speech-Ansagen für einen Zugsimulator abspielt. Das Programm verwendet `gtts` für die Text-to-Speech-Funktionalität und `tkinter` für die GUI.
 
 ## Inhaltsverzeichnis
 
@@ -34,13 +31,14 @@ pip install gtts pygame
 1. Starte das Programm:
 
     ```bash
-    python rail_announcer.py
+    python main.py
     ```
 
 2. Wähle eine Strecke und einen Zugdienst aus den Dropdown-Menüs.
 3. Klicke auf "Nächste Station" oder "Vorherige Station", um durch die Stationen zu navigieren.
 4. Die aktuelle und nächste Station werden angezeigt.
 5. Die Ansagen werden als "Nächster Halt Next Stop: <Stationsname>" abgespielt.
+6. Wenn die letzte Station erreicht ist, wird automatisch die Ansage "Dieser Zug endet hier. Bitte aussteigen. Vielen Dank, dass Sie mit uns gereist sind." abgespielt.
 
 ## Dateistruktur
 
@@ -54,27 +52,13 @@ Routen/
 ├── Strecke2/
 │   ├── Zugdienst1.txt
 │   ├── Zugdienst2.txt
-
 ```
 
-Jede `.txt`-Datei sollte eine Liste von Bahnhofsname enthalten, wobei jeder Name in einer neuen Zeile steht.
+Jede `.txt`-Datei sollte eine Liste von Bahnhofsname enthalten, wobei jeder Name in einer neuen Zeile steht. Siehe Beispiel Routen.
 
 ## Screenshots
 
-Füge hier einige Screenshots deines Programms ein, um den Benutzern einen visuellen Eindruck zu geben.
-
+![Screenshot](Screenshot.png)
 ## Contributing
 
-Beiträge sind willkommen! Bitte eröffne ein Issue, um Fehler zu melden oder neue Features zu diskutieren.
-
-## Lizenz
-
-Dieses Projekt steht unter der MIT-Lizenz.
-```
-
-### Hinweise:
-
-- Speichere den oben genannten Inhalt in einer Datei namens `README.md` in deinem Projektverzeichnis.
-- Ersetze `rail_announcer.py` durch den tatsächlichen Namen deiner Python-Datei, falls dieser anders ist.
-- Füge eventuell Screenshots hinzu, um die Benutzeroberfläche deines Programms zu zeigen.
-- Du kannst auch weitere Abschnitte hinzufügen, falls du zusätzliche Informationen bereitstellen möchtest.
+Beiträge sind willkommen! Bitte eröffne ein Issue, um Fehler zu melden, neue Features zu diskutieren oder neue Strecken anzulegen.
