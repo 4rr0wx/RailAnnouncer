@@ -6,7 +6,6 @@ import pygame
 import subprocess
 import platform
 
-
 class TrainSimulator:
     def __init__(self, root):
         self.root = root
@@ -81,8 +80,7 @@ class TrainSimulator:
     def update_station_labels(self):
         if self.stations:
             current_station = self.stations[self.current_station_index]
-            next_station = self.stations[self.current_station_index + 1] if self.current_station_index + 1 < len(
-                self.stations) else "Endstation"
+            next_station = self.stations[self.current_station_index + 1] if self.current_station_index + 1 < len(self.stations) else "Endstation"
             self.current_station_label.config(text=f"Aktuelle Station: {current_station}")
             self.next_station_label.config(text=f"Nächste Station: {next_station}")
 
@@ -103,20 +101,26 @@ class TrainSimulator:
             station_name = self.stations[self.current_station_index]
             announcement = f"Nächster Halt: {station_name}"
             tts = gTTS(text=announcement, lang='de')
-            tts.save("announcement.mp3")
+            mp3_path = os.path.join(os.getcwd(), "announcement.mp3")
+            if os.path.exists(mp3_path):
+                os.remove(mp3_path)
+            tts.save(mp3_path)
             pygame.mixer.init()
-            pygame.mixer.music.load("announcement.mp3")
+            pygame.mixer.music.load(mp3_path)
             pygame.mixer.music.play()
+            while pygame.mixer.music.get_busy():
+                pygame.time.Clock().tick(10)
+            pygame.mixer.quit()
 
     def open_folder(self):
-        folder_path = self.routes_dir
-        if platform.system() == "Windows":
-            os.startfile(folder_path)
-        elif platform.system() == "Darwin":
-            subprocess.Popen(["open", folder_path])
-        else:
-            subprocess.Popen(["xdg-open", folder_path])
-
+        if hasattr(self, 'current_path') and self.current_path:
+            folder_path = os.path.dirname(self.current_path)
+            if platform.system() == "Windows":
+                os.startfile(folder_path)
+            elif platform.system() == "Darwin":
+                subprocess.Popen(["open", folder_path])
+            else:
+                subprocess.Popen(["xdg-open", folder_path])
 
 if __name__ == "__main__":
     root = tk.Tk()
