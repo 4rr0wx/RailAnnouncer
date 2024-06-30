@@ -101,7 +101,7 @@ class TrainSimulator:
     def announce_station(self):
         if self.stations:
             station_name = self.stations[self.current_station_index]
-            announcement = f"Nächster Halt Next Stop: {station_name}"
+            announcement = f"Nächster Halt: {station_name}"
             tts = gTTS(text=announcement, lang='de')
             tts.save("announcement.mp3")
             pygame.mixer.init()
